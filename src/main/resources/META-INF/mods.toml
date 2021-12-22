@@ -1,12 +1,12 @@
 modLoader="javafml"
 loaderVersion="[36,)"
-license="GPLv3"
+license="BSD"
 
 [[mods]]
 modId="eidolonrecipes"
 version="${file.jarVersion}"
 displayName="Eidolon Data Recipes"
-logoFile="examplemod.png"
+logoFile="logo.png"
 credits="Thanks for this example mod goes to Java"
 authors="Love, Cheese and small house plants"
 description='''
