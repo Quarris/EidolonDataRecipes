@@ -1,0 +1,22 @@
+{
+  "type": "eidolon:spell",
+  "spell": "eidolon:prayer",
+  "deity": "eidolon:dark",
+  "signs": [
+    "eidolon:wicked",
+    "eidolon:wicked",
+    "eidolon:wicked"
+  ],
+  "requires": [
+    {
+      "type": "eidolon:effigy"
+    }
+  ],
+  "results": [
+    {
+      "type": "eidolon:reputation",
+      "constant": 1,
+      "altar": 0.25
+    }
+  ]
+}

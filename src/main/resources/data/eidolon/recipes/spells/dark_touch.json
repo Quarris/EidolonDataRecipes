@@ -1,0 +1,28 @@
+{
+  "type": "eidolon:spell",
+  "spell": "eidolon:transmutation",
+  "deity": "eidolon:dark",
+  "signs": [
+    "eidolon:wicked",
+    "eidolon:soul",
+    "eidolon:wicked",
+    "eidolon:soul"
+  ],
+  "requires": [
+    {
+      "type": "eidolon:reputation",
+      "reputation": 4.0
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "eidolon:pewter_inlay"
+    }
+  ],
+  "results": [
+    {
+      "type": "eidolon:item",
+      "item": "eidolon:unholy_symbol"
+    }
+  ]
+}

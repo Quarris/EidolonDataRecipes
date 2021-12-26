@@ -98,7 +98,7 @@ public class WorktableRecipeWrapper extends WorktableRecipe implements IRecipe<I
 
             WorktableRecipeWrapper recipe = new WorktableRecipeWrapper(core, extras, result);
             recipe.setRegistryName(recipeId);
-            WorktableRegistry.register(recipe);
+            //WorktableRegistry.register(recipe);
             return recipe;
         }
 
@@ -128,7 +128,7 @@ public class WorktableRecipeWrapper extends WorktableRecipe implements IRecipe<I
 
             WorktableRecipeWrapper recipe = new WorktableRecipeWrapper(core, extras, result);
             recipe.setRegistryName(recipeId);
-            WorktableRegistry.register(recipe);
+            //WorktableRegistry.register(recipe);
             return recipe;
         }
 

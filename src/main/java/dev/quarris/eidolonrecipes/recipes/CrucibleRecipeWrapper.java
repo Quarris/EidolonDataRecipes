@@ -77,7 +77,7 @@ public class CrucibleRecipeWrapper extends CrucibleRecipe implements IRecipe<IIn
                 recipe.addStirringStep(stirs, matches.toArray());
             }
             recipe.setRegistryName(recipeId);
-            CrucibleRegistry.register(recipe);
+            //CrucibleRegistry.register(recipe);
             return recipe;
         }
 
@@ -99,7 +99,7 @@ public class CrucibleRecipeWrapper extends CrucibleRecipe implements IRecipe<IIn
             }
 
             recipe.setRegistryName(recipeId);
-            CrucibleRegistry.register(recipe);
+            //CrucibleRegistry.register(recipe);
             return recipe;
         }
 

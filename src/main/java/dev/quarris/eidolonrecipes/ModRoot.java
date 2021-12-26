@@ -1,5 +1,6 @@
 package dev.quarris.eidolonrecipes;
 
+import dev.quarris.eidolonrecipes.registry.EidolonReflectedRegistries;
 import dev.quarris.eidolonrecipes.registry.RecipeTypes;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
@@ -22,10 +23,6 @@ public class ModRoot {
     public static final String ID = "eidolonrecipes";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final Map<ResourceLocation, CrucibleRecipe> CRUCIBLE_RECIPES = ObfuscationReflectionHelper.getPrivateValue(CrucibleRegistry.class, null, "recipes");
-
-    public static final Map<ResourceLocation, WorktableRecipe> WORKTABLE_RECIPES = ObfuscationReflectionHelper.getPrivateValue(WorktableRegistry.class, null, "recipes");
-
     public ModRoot() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::onLoad);
@@ -33,7 +30,6 @@ public class ModRoot {
     }
 
     public void onLoad(FMLLoadCompleteEvent event) {
-        CRUCIBLE_RECIPES.clear();
-        WORKTABLE_RECIPES.clear();
+        EidolonReflectedRegistries.onLoadComplete();
     }
 }
