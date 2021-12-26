@@ -2,10 +2,9 @@ package dev.quarris.eidolonrecipes.recipes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dev.quarris.eidolonrecipes.utils.ItemUtil;
 import dev.quarris.eidolonrecipes.registry.RecipeTypes;
+import dev.quarris.eidolonrecipes.utils.ItemUtil;
 import elucent.eidolon.recipe.CrucibleRecipe;
-import elucent.eidolon.recipe.CrucibleRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -77,7 +76,6 @@ public class CrucibleRecipeWrapper extends CrucibleRecipe implements IRecipe<IIn
                 recipe.addStirringStep(stirs, matches.toArray());
             }
             recipe.setRegistryName(recipeId);
-            //CrucibleRegistry.register(recipe);
             return recipe;
         }
 
@@ -99,7 +97,6 @@ public class CrucibleRecipeWrapper extends CrucibleRecipe implements IRecipe<IIn
             }
 
             recipe.setRegistryName(recipeId);
-            //CrucibleRegistry.register(recipe);
             return recipe;
         }
 
