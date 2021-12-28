@@ -1,9 +1,7 @@
 package dev.quarris.eidolonrecipes;
 
-import dev.quarris.eidolonrecipes.recipes.CrucibleRecipeWrapper;
 import dev.quarris.eidolonrecipes.registry.EidolonReflectedRegistries;
 import dev.quarris.eidolonrecipes.registry.RecipeTypes;
-import dev.quarris.eidolonrecipes.spells.SpellManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -22,7 +20,7 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void addReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(SpellManager.INST);
+
     }
 
     @SubscribeEvent

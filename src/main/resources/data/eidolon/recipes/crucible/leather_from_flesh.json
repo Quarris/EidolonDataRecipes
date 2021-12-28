@@ -7,10 +7,8 @@
     {
       "ingredients": [
         {
-          "item": "eidolon:enchanted_ash"
-        },
-        {
-          "item": "eidolon:enchanted_ash"
+          "item": "eidolon:enchanted_ash",
+          "count": 2
         }
       ]
     },
