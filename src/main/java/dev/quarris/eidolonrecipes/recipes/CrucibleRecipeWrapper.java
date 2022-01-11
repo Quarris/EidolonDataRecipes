@@ -6,6 +6,7 @@ import dev.quarris.eidolonrecipes.registry.RecipeTypes;
 import dev.quarris.eidolonrecipes.utils.ItemUtil;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -70,7 +71,17 @@ public class CrucibleRecipeWrapper extends CrucibleRecipe implements IRecipe<IIn
             for (JsonElement jsonStep : JSONUtils.getJsonArray(json, "steps")) {
                 List<Object> matches = new ArrayList<>();
                 for (JsonElement jsonIngredient : JSONUtils.getJsonArray(JSONUtils.getJsonObject(jsonStep, "step"), "ingredients")) {
-                    matches.add(ItemUtil.deserializeRecipeIngredient(jsonIngredient.getAsJsonObject()));
+                    Object ingredient = ItemUtil.deserializeRecipeIngredient(jsonIngredient.getAsJsonObject());
+                    if (ingredient instanceof ItemStack) {
+                        ItemStack item = (ItemStack) ingredient;
+                        for (int i = 0; i < item.getCount(); i++) {
+                            ItemStack copy = item.copy();
+                            copy.setCount(1);
+                            matches.add(copy);
+                        }
+                    } else {
+                        matches.add(ingredient);
+                    }
                 }
                 int stirs = JSONUtils.getInt(jsonStep.getAsJsonObject(), "stirs", 0);
                 recipe.addStirringStep(stirs, matches.toArray());

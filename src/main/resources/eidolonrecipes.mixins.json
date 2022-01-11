@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "eidolonrecipes.refmap.json",
   "mixins": [
+    "StackUtilMixin"
   ],
   "minVersion": "0.8"
 }
