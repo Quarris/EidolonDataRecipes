@@ -10,7 +10,6 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onDataReload(OnDatapackSyncEvent event) {
-        EidolonReflectedRegistries.onDataPackReloaded(event.getPlayerList().getServer());
-
+        EidolonReflectedRegistries.onDataPackReloaded(event.getPlayerList().getServer().getRecipeManager());
     }
 }

@@ -129,7 +129,7 @@ public class CrucibleRecipeWrapper extends CrucibleRecipe implements IRecipe<IIn
                     matches.add(ingredient);
                 }
             }
-            recipe.addStirringStep(stirs, matches);
+            recipe.addStirringStep(stirs, matches.toArray());
         }
     }
 }
