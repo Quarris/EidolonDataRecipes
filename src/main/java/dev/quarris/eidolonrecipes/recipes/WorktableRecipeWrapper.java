@@ -5,7 +5,6 @@ import com.google.gson.*;
 import dev.quarris.eidolonrecipes.registry.RecipeTypes;
 import dev.quarris.eidolonrecipes.utils.ItemUtil;
 import elucent.eidolon.recipe.WorktableRecipe;
-import elucent.eidolon.recipe.WorktableRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -98,7 +97,6 @@ public class WorktableRecipeWrapper extends WorktableRecipe implements IRecipe<I
 
             WorktableRecipeWrapper recipe = new WorktableRecipeWrapper(core, extras, result);
             recipe.setRegistryName(recipeId);
-            //WorktableRegistry.register(recipe);
             return recipe;
         }
 
@@ -128,7 +126,6 @@ public class WorktableRecipeWrapper extends WorktableRecipe implements IRecipe<I
 
             WorktableRecipeWrapper recipe = new WorktableRecipeWrapper(core, extras, result);
             recipe.setRegistryName(recipeId);
-            //WorktableRegistry.register(recipe);
             return recipe;
         }
 
