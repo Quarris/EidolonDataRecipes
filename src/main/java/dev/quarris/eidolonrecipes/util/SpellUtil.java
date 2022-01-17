@@ -1,4 +1,4 @@
-package dev.quarris.eidolonrecipes.utils;
+package dev.quarris.eidolonrecipes.util;
 
 import elucent.eidolon.capability.ReputationProvider;
 import net.minecraft.entity.player.PlayerEntity;

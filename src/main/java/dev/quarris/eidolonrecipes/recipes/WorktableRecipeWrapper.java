@@ -3,7 +3,7 @@ package dev.quarris.eidolonrecipes.recipes;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
 import dev.quarris.eidolonrecipes.registry.RecipeTypes;
-import dev.quarris.eidolonrecipes.utils.ItemUtil;
+import dev.quarris.eidolonrecipes.util.ItemUtil;
 import elucent.eidolon.recipe.WorktableRecipe;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
