@@ -1,4 +1,4 @@
-package dev.quarris.eidolonrecipes.utils;
+package dev.quarris.eidolonrecipes.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -14,6 +14,30 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemUtil {
+
+    public static JsonObject serializeRecipeIngredient(Object ingredient) {
+        JsonObject json = new JsonObject();
+        if (ingredient instanceof ItemStack) {
+            ItemStack item = (ItemStack) ingredient;
+            json.addProperty("item", item.getItem().getRegistryName().toString());
+            if (item.getCount() > 1) {
+                json.addProperty("count", item.getCount());
+            }
+            if (item.hasTag()) {
+                json.addProperty("nbt", item.getTag().toString());
+            }
+        } else if (ingredient instanceof Item) {
+            json.addProperty("item", ((Item) ingredient).getRegistryName().toString());
+        } else if (ingredient instanceof Block) {
+            json.addProperty("item", ((Block) ingredient).asItem().getRegistryName().toString());
+        } else if (ingredient instanceof ITag) {
+            json.addProperty("tag", TagCollectionManager.getManager().getItemTags().getDirectIdFromTag((ITag<Item>) ingredient).toString());
+        } else {
+            ModRoot.LOGGER.warn("Unknown step match for writing to buffer {}", ingredient);
+        }
+
+        return json;
+    }
 
     public static Object deserializeRecipeIngredient(JsonObject json) {
         if (json.has("tag")) {
@@ -69,6 +93,26 @@ public class ItemUtil {
                 return null;
             }
         }
+    }
+
+    public static boolean matchesIngredient(Object match, ItemStack ingredient) {
+        if (match instanceof ItemStack) {
+            if (ItemStack.areItemStacksEqual((ItemStack)match, ingredient)) {
+                return true;
+            }
+        } else if (match instanceof Item) {
+            if ((Item)match == ingredient.getItem()) {
+                return true;
+            }
+        } else if (match instanceof Block) {
+            if (((Block)match).asItem() == ingredient.getItem()) {
+                return true;
+            }
+        } else if (match instanceof ITag && ((ITag)match).contains(ingredient.getItem())) {
+            return true;
+        }
+
+        return false;
     }
 
 }

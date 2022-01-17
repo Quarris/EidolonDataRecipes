@@ -1,0 +1,57 @@
+{
+  "type": "eidolon:spell",
+  "deity": "eidolon:dark",
+  "signs": [
+    "eidolon:wicked",
+    "eidolon:soul",
+    "eidolon:wicked",
+    "eidolon:soul"
+  ],
+  "spell": {
+    "type": "eidolon:transmutation",
+    "transmutations": [
+      {
+        "ingredients": [
+          {
+            "item": "eidolon:pewter_inlay"
+          }
+        ],
+        "results": [
+          {
+            "item": "eidolon:unholy_symbol"
+          }
+        ]
+      },
+      {
+        "ingredients": [
+          {
+            "item": "minecraft:black_wool"
+          }
+        ],
+        "results": [
+          {
+            "item": "eidolon:top_hat"
+          }
+        ]
+      },
+      {
+        "ingredients": [
+          {
+            "tag": "minecraft:music_discs"
+          }
+        ],
+        "results": [
+          {
+            "item": "eidolon:music_disc_parousia"
+          }
+        ]
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "type": "eidolon:reputation",
+      "reputation": 4.0
+    }
+  ]
+}

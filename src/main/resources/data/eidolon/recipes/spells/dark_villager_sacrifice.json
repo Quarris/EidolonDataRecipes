@@ -1,6 +1,5 @@
 {
   "type": "eidolon:spell",
-  "spell": "eidolon:sacrifice",
   "deity": "eidolon:dark",
   "signs": [
     "eidolon:blood",
@@ -8,7 +7,10 @@
     "eidolon:blood",
     "eidolon:soul"
   ],
-  "requires": [
+  "spell": {
+    "type": "eidolon:basic"
+  },
+  "requirements": [
     {
       "type": "eidolon:reputation",
       "reputation": 15.0
@@ -23,20 +25,22 @@
       "sacrifice": "eidolon:is_villager_or_player"
     }
   ],
-  "ingredients": [
-    {
-      "item": "eidolon:pewter_inlay"
-    }
-  ],
   "results": [
     {
+      "type": "eidolon:pray"
+    },
+    {
+      "type": "eidolon:empty_goblet"
+    },
+    {
       "type": "eidolon:unlock",
-      "lock": "eidolon:sacrifice_mob"
+      "lock": "eidolon:sacrifice_villager"
     },
     {
       "type": "eidolon:reputation",
       "constant": 3,
       "altar": 0.5
     }
-  ]
+  ],
+  "particleColor": [255, 230, 138, 226]
 }

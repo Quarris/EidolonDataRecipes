@@ -1,13 +1,15 @@
 {
   "type": "eidolon:spell",
-  "spell": "eidolon:sacrifice",
   "deity": "eidolon:dark",
   "signs": [
     "eidolon:wicked",
     "eidolon:blood",
     "eidolon:wicked"
   ],
-  "requires": [
+  "spell": {
+    "type": "eidolon:basic"
+  },
+  "requirements": [
     {
       "type": "eidolon:reputation",
       "reputation": 3.0
@@ -20,12 +22,13 @@
       "sacrifice": "eidolon:is_animal"
     }
   ],
-  "ingredients": [
-    {
-      "item": "eidolon:pewter_inlay"
-    }
-  ],
   "results": [
+    {
+      "type": "eidolon:pray"
+    },
+    {
+      "type": "eidolon:empty_goblet"
+    },
     {
       "type": "eidolon:unlock",
       "lock": "eidolon:sacrifice_mob"
@@ -35,5 +38,6 @@
       "constant": 3,
       "altar": 0.5
     }
-  ]
+  ],
+  "particleColor": [255, 255, 51, 85]
 }
