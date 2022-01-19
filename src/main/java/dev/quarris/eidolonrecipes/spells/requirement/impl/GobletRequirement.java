@@ -69,7 +69,7 @@ public class GobletRequirement implements ISpellRequirement {
         @Override
         public void serialize(JsonObject json, GobletRequirement result) {
             json.addProperty("sacrifice", result.sacrifice.toString());
-            result.type.ifPresent(type -> json.add("type", type.serialize()));
+            result.type.ifPresent(type -> json.add("entity_type", type.serialize()));
         }
 
         @Override
@@ -77,7 +77,7 @@ public class GobletRequirement implements ISpellRequirement {
             ResourceLocation sacrifice = new ResourceLocation(JSONUtils.getString(json, "sacrifice"));
             Optional<EntityTypePredicate> type;
             if (sacrifice.toString().equals("eidolon:entity_type")) {
-                type = Optional.of(EntityTypePredicate.deserialize(json.get("type")));
+                type = Optional.of(EntityTypePredicate.deserialize(json.get("entity_type")));
             } else {
                 type = Optional.empty();
             }
