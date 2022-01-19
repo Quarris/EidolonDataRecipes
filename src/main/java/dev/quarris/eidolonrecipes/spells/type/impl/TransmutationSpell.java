@@ -109,39 +109,26 @@ public class TransmutationSpell implements ISpell {
         public boolean match(List<ItemEntity> items, List<ItemEntity> matched) {
             items = new ArrayList<>(items);
             List<Object> matchList = new ArrayList<>(this.ingredients);
-            for (int i = 0; i < matchList.size(); i++) {
-                Object match = matchList.get(i);
+            for (Object match : matchList) {
+                boolean foundMatch = false;
                 for (int j = 0; j < items.size(); j++) {
                     ItemEntity item = items.get(j);
                     if (ItemUtil.matchesIngredient(match, item.getItem())) {
                         if (matched != null) {
                             matched.add(item);
                         }
-                        matchList.remove(i);
                         items.remove(j);
+                        foundMatch = true;
                         break;
                     }
                 }
-            }
-
-            return matchList.isEmpty();
-        }
-
-        public List<ItemEntity> filterMatched(List<ItemEntity> items) {
-            List<ItemEntity> matched = new ArrayList<>();
-            for (Object ingredient : this.ingredients) {
-                for (int i = 0; i < items.size(); i++) {
-                    ItemEntity e = items.get(i);
-                    if (ItemUtil.matchesIngredient(ingredient, e.getItem())) {
-                        matched.add(e);
-                        items.remove(i);
-                        break;
-                    }
+                if (!foundMatch) {
+                    return false;
                 }
             }
-            return matched;
-        }
 
+            return true;
+        }
 
         public JsonObject toJson() {
             JsonArray ingredientArray = new JsonArray();
