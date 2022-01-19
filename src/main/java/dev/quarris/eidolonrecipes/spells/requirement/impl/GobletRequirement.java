@@ -8,6 +8,7 @@ import dev.quarris.eidolonrecipes.spells.SpellInfo;
 import dev.quarris.eidolonrecipes.spells.SpellRecipeWrapper;
 import dev.quarris.eidolonrecipes.spells.requirement.ISpellRequirement;
 import dev.quarris.eidolonrecipes.spells.requirement.ISpellRequirementSerializer;
+import dev.quarris.eidolonrecipes.util.EntityUtil;
 import elucent.eidolon.tile.GobletTileEntity;
 import net.minecraft.advancements.criterion.EntityTypePredicate;
 import net.minecraft.entity.Entity;
@@ -77,7 +78,7 @@ public class GobletRequirement implements ISpellRequirement {
             ResourceLocation sacrifice = new ResourceLocation(JSONUtils.getString(json, "sacrifice"));
             Optional<EntityTypePredicate> type;
             if (sacrifice.toString().equals("eidolon:entity_type")) {
-                type = Optional.of(EntityTypePredicate.deserialize(json.get("entity_type")));
+                type = Optional.of(EntityUtil.deserializeFromString(json.get("entity_type").getAsString()));
             } else {
                 type = Optional.empty();
             }
