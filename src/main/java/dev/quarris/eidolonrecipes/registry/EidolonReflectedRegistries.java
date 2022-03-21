@@ -1,5 +1,8 @@
 package dev.quarris.eidolonrecipes.registry;
 
+import dev.quarris.eidolonrecipes.recipes.CrucibleRecipeWrapper;
+import dev.quarris.eidolonrecipes.recipes.WorktableRecipeWrapper;
+import dev.quarris.eidolonrecipes.spells.SpellRecipeWrapper;
 import elucent.eidolon.recipe.CrucibleRecipe;
 import elucent.eidolon.recipe.CrucibleRegistry;
 import elucent.eidolon.recipe.WorktableRecipe;
@@ -29,18 +32,36 @@ public class EidolonReflectedRegistries {
     public static final Map<ResourceLocation, Spell> SPELL_MAP = ObfuscationReflectionHelper.getPrivateValue(Spells.class, null, "spellMap");
 
     public static void onDataPackReloaded(RecipeManager manager) {
-        CRUCIBLE_RECIPES.clear();
-        CRUCIBLE_RECIPES.putAll(getRecipes(manager, RecipeTypes.CRUCIBLE));
+        Map<ResourceLocation, CrucibleRecipeWrapper> crucibleRecipes = getRecipes(manager, RecipeTypes.CRUCIBLE);
+        CRUCIBLE_RECIPES.replaceAll((k, v) -> {
+            if (crucibleRecipes.containsKey(k)) {
+                return crucibleRecipes.get(k);
+            }
 
-        WORKTABLE_RECIPES.clear();
-        WORKTABLE_RECIPES.putAll(getRecipes(manager, RecipeTypes.WORKTABLE));
+            return v;
+        });
 
-        SPELL_MAP.clear();
-        SPELLS.clear();
+        Map<ResourceLocation, WorktableRecipeWrapper> worktableRecipes = getRecipes(manager, RecipeTypes.WORKTABLE);
+        WORKTABLE_RECIPES.replaceAll((k, v) -> {
+            if (worktableRecipes.containsKey(k)) {
+                return worktableRecipes.get(k);
+            }
 
+            return v;
+        });
+
+        Map<ResourceLocation, SpellRecipeWrapper> spellRecipes = getRecipes(manager, RecipeTypes.SPELL);
+        SPELL_MAP.replaceAll((k, v) -> {
+            if (spellRecipes.containsKey(k)) {
+                return spellRecipes.get(k);
+            }
+
+            return v;
+        });
         SPELL_MAP.putAll(getRecipes(manager, RecipeTypes.SPELL));
-        SPELLS.addAll(SPELL_MAP.values());
 
+        SPELLS.clear();
+        SPELLS.addAll(SPELL_MAP.values());
     }
 
     private static <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, T> getRecipes(RecipeManager manager, IRecipeType<T> type) {
