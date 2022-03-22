@@ -16,8 +16,10 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,7 @@ public class EidolonReflectedRegistries {
 
     public static final Map<ResourceLocation, CrucibleRecipe> CRUCIBLE_RECIPES = ObfuscationReflectionHelper.getPrivateValue(CrucibleRegistry.class, null, "recipes");
 
-    public static final Map<ResourceLocation, WorktableRecipe> WORKTABLE_RECIPES = ObfuscationReflectionHelper.getPrivateValue(WorktableRegistry.class, null, "recipes");
+    public static final HashMap<ResourceLocation, WorktableRecipe> WORKTABLE_RECIPES = ObfuscationReflectionHelper.getPrivateValue(WorktableRegistry.class, null, "recipes");
 
     public static final List<Spell> SPELLS = ObfuscationReflectionHelper.getPrivateValue(Spells.class, null, "spells");
 
@@ -33,39 +35,30 @@ public class EidolonReflectedRegistries {
 
     public static void onDataPackReloaded(RecipeManager manager) {
         Map<ResourceLocation, CrucibleRecipeWrapper> crucibleRecipes = getRecipes(manager, RecipeTypes.CRUCIBLE);
-        CRUCIBLE_RECIPES.replaceAll((k, v) -> {
-            if (crucibleRecipes.containsKey(k)) {
-                return crucibleRecipes.get(k);
-            }
-
-            return v;
-        });
+        clearEntriesIfPresent(CRUCIBLE_RECIPES, crucibleRecipes.keySet());
+        CRUCIBLE_RECIPES.putAll(crucibleRecipes);
 
         Map<ResourceLocation, WorktableRecipeWrapper> worktableRecipes = getRecipes(manager, RecipeTypes.WORKTABLE);
-        WORKTABLE_RECIPES.replaceAll((k, v) -> {
-            if (worktableRecipes.containsKey(k)) {
-                return worktableRecipes.get(k);
-            }
-
-            return v;
-        });
+        clearEntriesIfPresent(WORKTABLE_RECIPES, worktableRecipes.keySet());
+        WORKTABLE_RECIPES.putAll(worktableRecipes);
 
         Map<ResourceLocation, SpellRecipeWrapper> spellRecipes = getRecipes(manager, RecipeTypes.SPELL);
-        SPELL_MAP.replaceAll((k, v) -> {
-            if (spellRecipes.containsKey(k)) {
-                return spellRecipes.get(k);
-            }
-
-            return v;
-        });
-        SPELL_MAP.putAll(getRecipes(manager, RecipeTypes.SPELL));
-
+        clearEntriesIfPresent(SPELL_MAP, spellRecipes.keySet());
+        SPELL_MAP.putAll(spellRecipes);
         SPELLS.clear();
         SPELLS.addAll(SPELL_MAP.values());
     }
 
     private static <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, T> getRecipes(RecipeManager manager, IRecipeType<T> type) {
         return manager.getRecipesForType(type).stream().collect(Collectors.toMap(IRecipe::getId, Function.identity()));
+    }
+
+    private static void clearEntriesIfPresent(Map<ResourceLocation, ?> map, Set<ResourceLocation> keys) {
+        for (ResourceLocation key : keys) {
+            if (map.containsKey(key)) {
+                map.remove(key);
+            }
+        }
     }
 
 }
