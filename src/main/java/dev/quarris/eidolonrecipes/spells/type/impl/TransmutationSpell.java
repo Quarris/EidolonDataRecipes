@@ -26,9 +26,11 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TransmutationSpell implements ISpell {
     public static final ResourceLocation ID = ModRoot.eidolonRes("transmutation");
@@ -61,7 +63,7 @@ public class TransmutationSpell implements ISpell {
         List<ItemEntity> items = world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(v.x - 1.5D, v.y - 1.5D, v.z - 1.5D, v.x + 1.5D, v.y + 1.5D, v.z + 1.5D));
 
         TransmutationRecipe transmutation = null;
-        List<ItemEntity> matched = new ArrayList<>();
+        List<Pair<ItemEntity, Integer>> matched = new ArrayList<>();
         for (TransmutationRecipe recipe : this.transmutations) {
             if (recipe.match(items, matched)) {
                 transmutation = recipe;
@@ -72,13 +74,20 @@ public class TransmutationSpell implements ISpell {
             return;
         }
 
-        if (!world.isRemote) {
-            for (ItemEntity item : matched) {
-                Vector3d p = item.getPositionVec();
+        for (Pair<ItemEntity, Integer> pair : matched) {
+            ItemEntity item = pair.getLeft();
+            int count = pair.getRight();
+            Vector3d p = item.getPositionVec();
+            item.getItem().shrink(count);
+            if (item.getItem().isEmpty()) {
                 item.remove();
+            }
+            if (!world.isRemote) {
                 Networking.sendToTracking(world, item.getPosition(), new MagicBurstEffectPacket(p.x, p.y, p.z, Signs.WICKED_SIGN.getColor(), Signs.BLOOD_SIGN.getColor()));
             }
+        }
 
+        if (!world.isRemote) {
             for (ItemStack item : transmutation.results) {
                 ItemEntity entity = new ItemEntity(world, v.x, v.y, v.z, item.copy());
                 entity.setDefaultPickupDelay();
@@ -106,7 +115,7 @@ public class TransmutationSpell implements ISpell {
             this.results = results;
         }
 
-        public boolean match(List<ItemEntity> items, List<ItemEntity> matched) {
+        public boolean match(List<ItemEntity> items, List<Pair<ItemEntity, Integer>> matched) {
             items = new ArrayList<>(items);
             List<Object> matchList = new ArrayList<>(this.ingredients);
             for (Object match : matchList) {
@@ -115,7 +124,8 @@ public class TransmutationSpell implements ISpell {
                     ItemEntity item = items.get(j);
                     if (ItemUtil.matchesIngredient(match, item.getItem())) {
                         if (matched != null) {
-                            matched.add(item);
+                            int count = match instanceof ItemStack ? ((ItemStack) match).getCount() : 1;
+                            matched.add(Pair.of(item, count));
                         }
                         items.remove(j);
                         foundMatch = true;

@@ -95,20 +95,21 @@ public class ItemUtil {
         }
     }
 
-    public static boolean matchesIngredient(Object match, ItemStack ingredient) {
+    public static boolean matchesIngredient(Object match, ItemStack input) {
         if (match instanceof ItemStack) {
-            if (ItemStack.areItemStacksEqual((ItemStack)match, ingredient)) {
+            ItemStack stack = (ItemStack) match;
+            if (ItemStack.areItemsEqual(stack, input) && ItemStack.areItemStackTagsEqual(stack, input) && input.getCount() >= stack.getCount()) {
                 return true;
             }
         } else if (match instanceof Item) {
-            if ((Item)match == ingredient.getItem()) {
+            if ((Item)match == input.getItem()) {
                 return true;
             }
         } else if (match instanceof Block) {
-            if (((Block)match).asItem() == ingredient.getItem()) {
+            if (((Block)match).asItem() == input.getItem()) {
                 return true;
             }
-        } else if (match instanceof ITag && ((ITag)match).contains(ingredient.getItem())) {
+        } else if (match instanceof ITag && ((ITag)match).contains(input.getItem())) {
             return true;
         }
 

@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '2.3-hf2'
+version = '2.4'
 group = 'dev.quarris.eidolonrecipes' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'eidolonrecipes'
 
@@ -112,7 +112,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.22'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     implementation fg.deobf('curse.maven:eidolon-429625:3157832')
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.6.6")
