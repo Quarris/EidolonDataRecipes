@@ -1,14 +1,11 @@
 package dev.quarris.eidolonrecipes;
 
 import dev.quarris.eidolonrecipes.registry.EidolonReflectedRegistries;
-import dev.quarris.eidolonrecipes.registry.RecipeTypes;
-import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
+import elucent.eidolon.capability.ReputationProvider;
+import net.minecraft.world.World;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -23,5 +20,13 @@ public class EventHandler {
     @SubscribeEvent
     public static void onDataReload(OnDatapackSyncEvent event) {
         EidolonReflectedRegistries.onDataPackReloaded(event.getPlayerList().getServer().getRecipeManager());
+    }
+
+    @SubscribeEvent
+    public static void onSleepFinished(SleepFinishedTimeEvent event) {
+        World world = ((World) event.getWorld());
+        long skipped = event.getNewTime() - world.getDayTime();
+        // When sleeping, reduce the prayer time to account for the slept time
+        world.getCapability(ReputationProvider.CAPABILITY).ifPresent(cap -> cap.getPrayerTimes().replaceAll((id, time) -> Math.max(0, time - skipped)));
     }
 }

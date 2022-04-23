@@ -19,7 +19,7 @@ mixin {
     add sourceSets.main, archivesBaseName+".refmap.json"
 }
 
-version = '2.5'
+version = '2.6'
 group = 'dev.quarris.eidolonrecipes' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'eidolonrecipes'
 
