@@ -2,6 +2,7 @@ package dev.quarris.eidolonrecipes;
 
 import dev.quarris.eidolonrecipes.registry.EidolonReflectedRegistries;
 import dev.quarris.eidolonrecipes.registry.RecipeTypes;
+import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;

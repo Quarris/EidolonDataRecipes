@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -141,7 +142,7 @@ public class WorktableRecipeWrapper extends WorktableRecipe implements IRecipe<I
                     throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
                 }
 
-                map.put(entry.getKey(), ItemUtil.deserializeRecipeIngredient(entry.getValue().getAsJsonObject()));
+                map.put(entry.getKey(), ItemUtil.deserializeRecipeIngredient(entry.getValue()));
             }
 
             map.put(" ", ItemStack.EMPTY);

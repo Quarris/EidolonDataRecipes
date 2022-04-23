@@ -122,7 +122,7 @@ public class TransmutationSpell implements ISpell {
                 boolean foundMatch = false;
                 for (int j = 0; j < items.size(); j++) {
                     ItemEntity item = items.get(j);
-                    if (ItemUtil.matchesIngredient(match, item.getItem())) {
+                    if (ItemUtil.matchesIngredient(match, item.getItem(), false)) {
                         if (matched != null) {
                             int count = match instanceof ItemStack ? ((ItemStack) match).getCount() : 1;
                             matched.add(Pair.of(item, count));

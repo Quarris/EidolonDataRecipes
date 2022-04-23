@@ -4,7 +4,10 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "eidolonrecipes.refmap.json",
   "mixins": [
-    "StackUtilMixin"
+    "CrucibleRecipeMixin",
+    "IngredientMixin",
+    "StackUtilMixin",
+    "WorktableRecipeMixin"
   ],
   "minVersion": "0.8"
 }

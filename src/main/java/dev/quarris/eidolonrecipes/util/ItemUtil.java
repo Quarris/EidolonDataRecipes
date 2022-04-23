@@ -1,11 +1,13 @@
 package dev.quarris.eidolonrecipes.util;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import dev.quarris.eidolonrecipes.ModRoot;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
@@ -32,15 +34,25 @@ public class ItemUtil {
             json.addProperty("item", ((Block) ingredient).asItem().getRegistryName().toString());
         } else if (ingredient instanceof ITag) {
             json.addProperty("tag", TagCollectionManager.getManager().getItemTags().getDirectIdFromTag((ITag<Item>) ingredient).toString());
+        } else if (ingredient instanceof Ingredient) {
+            JsonElement serialized = ((Ingredient) ingredient).serialize();
+            if (serialized.isJsonArray()) {
+                json.add("items", serialized);
+            } else {
+                json.add("item", serialized);
+            }
         } else {
             ModRoot.LOGGER.warn("Unknown step match for writing to buffer {}", ingredient);
         }
 
+
         return json;
     }
 
-    public static Object deserializeRecipeIngredient(JsonObject json) {
-        if (json.has("tag")) {
+    public static Object deserializeRecipeIngredient(JsonElement json) {
+        return Ingredient.deserialize(json);
+
+        /*if (json.has("tag")) {
             return TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(json.get("tag").getAsString()));
         } else if (json.has("item")) {
             if (!json.has("count") && !json.has("nbt")) {
@@ -52,7 +64,7 @@ public class ItemUtil {
             return CraftingHelper.getItemStack(json, true);
         }
 
-        throw new JsonParseException("Recipe Ingredient must contain either a 'tag' or an 'item'");
+        throw new JsonParseException("Recipe Ingredient must contain either a 'tag' or an 'item'");*/
     }
 
     public static void writeRecipeIngredient(Object ingredient, PacketBuffer buffer) {
@@ -67,7 +79,11 @@ public class ItemUtil {
             buffer.writeResourceLocation(((Block) ingredient).getRegistryName());
         } else if (ingredient instanceof ITag) {
             buffer.writeVarInt(4);
-            buffer.writeResourceLocation(TagCollectionManager.getManager().getItemTags().getDirectIdFromTag((ITag<Item>) ingredient));
+            buffer.writeResourceLocation(TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag((ITag<Item>) ingredient));
+        } else if (ingredient instanceof Ingredient) {
+            buffer.writeVarInt(5);
+            Ingredient ing = (Ingredient) ingredient;
+            ing.write(buffer);
         } else {
             ModRoot.LOGGER.warn("Unknown step match for writing to buffer {}", ingredient);
         }
@@ -88,6 +104,9 @@ public class ItemUtil {
             case 4: {
                 return TagCollectionManager.getManager().getItemTags().get(buffer.readResourceLocation());
             }
+            case 5: {
+                return Ingredient.read(buffer);
+            }
             default: {
                 ModRoot.LOGGER.warn("Unknown recipe ingredient type '{}' while reading a buffer", type);
                 return null;
@@ -95,22 +114,29 @@ public class ItemUtil {
         }
     }
 
-    public static boolean matchesIngredient(Object match, ItemStack input) {
+    public static boolean matchesIngredient(Object match, ItemStack input, boolean matchCount) {
         if (match instanceof ItemStack) {
             ItemStack stack = (ItemStack) match;
-            if (ItemStack.areItemsEqual(stack, input) && ItemStack.areItemStackTagsEqual(stack, input) && input.getCount() >= stack.getCount()) {
+            if (!matchCount ? ItemStack.areItemStacksEqual(stack, input) : ItemStack.areItemsEqual(stack, input) && ItemStack.areItemStackTagsEqual(stack, input) && input.getCount() >= stack.getCount()) {
                 return true;
             }
         } else if (match instanceof Item) {
-            if ((Item)match == input.getItem()) {
+            if (match == input.getItem()) {
                 return true;
             }
         } else if (match instanceof Block) {
-            if (((Block)match).asItem() == input.getItem()) {
+            if (((Block) match).asItem() == input.getItem()) {
                 return true;
             }
-        } else if (match instanceof ITag && ((ITag)match).contains(input.getItem())) {
+        } else if (match instanceof ITag && ((ITag) match).contains(input.getItem())) {
             return true;
+        } else if (match instanceof Ingredient) {
+            Ingredient ingredient = (Ingredient) match;
+            for (ItemStack stack : ingredient.getMatchingStacks()) {
+                if (matchesIngredient(stack, input, true)) {
+                    return true;
+                }
+            }
         }
 
         return false;
