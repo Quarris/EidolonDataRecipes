@@ -14,7 +14,6 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void on(RecipesUpdatedEvent event) {
-        System.out.println(Minecraft.getInstance().world.getTags().getItemTags().getRegisteredTags().size());
         EidolonReflectedRegistries.onDataPackReloaded(event.getRecipeManager());
     }
 }

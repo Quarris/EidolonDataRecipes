@@ -13,15 +13,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.resources.DataPackRegistries;
-import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -37,15 +36,15 @@ public class EidolonReflectedRegistries {
 
     public static void onDataPackReloaded(RecipeManager manager) {
         Map<ResourceLocation, CrucibleRecipeWrapper> crucibleRecipes = getRecipes(manager, RecipeTypes.CRUCIBLE);
-        clearEntriesIfPresent(CRUCIBLE_RECIPES, crucibleRecipes.keySet());
+        clearEntriesIf(CRUCIBLE_RECIPES, (id, recipe) -> manager.getKeys().anyMatch(id::equals));
         CRUCIBLE_RECIPES.putAll(crucibleRecipes);
 
         Map<ResourceLocation, WorktableRecipeWrapper> worktableRecipes = getRecipes(manager, RecipeTypes.WORKTABLE);
-        clearEntriesIfPresent(WORKTABLE_RECIPES, worktableRecipes.keySet());
+        clearEntriesIf(WORKTABLE_RECIPES, (id, recipe) -> manager.getKeys().anyMatch(id::equals));
         WORKTABLE_RECIPES.putAll(worktableRecipes);
 
         Map<ResourceLocation, SpellRecipeWrapper> spellRecipes = getRecipes(manager, RecipeTypes.SPELL);
-        clearEntriesIfPresent(SPELL_MAP, spellRecipes.keySet());
+        clearEntriesIf(SPELL_MAP, (id, recipe) -> manager.getKeys().anyMatch(id::equals));
         SPELL_MAP.putAll(spellRecipes);
         SPELLS.clear();
         SPELLS.addAll(SPELL_MAP.values());
@@ -55,12 +54,8 @@ public class EidolonReflectedRegistries {
         return manager.getRecipesForType(type).stream().collect(Collectors.toMap(IRecipe::getId, Function.identity()));
     }
 
-    private static void clearEntriesIfPresent(Map<ResourceLocation, ?> map, Set<ResourceLocation> keys) {
-        for (ResourceLocation key : keys) {
-            if (map.containsKey(key)) {
-                map.remove(key);
-            }
-        }
+    private static <T> void clearEntriesIf(Map<ResourceLocation, T> map, BiFunction<ResourceLocation, T, Boolean> shouldClear) {
+        map.entrySet().removeIf(entry -> shouldClear.apply(entry.getKey(), entry.getValue()));
     }
 
 }
